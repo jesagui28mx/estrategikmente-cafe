@@ -1,6 +1,6 @@
-const express = require('express');
-const nodemailer = require('nodemailer');
-const { PDFDocument } = require('pdf-lib');
+import express from 'express';
+import nodemailer from 'nodemailer';
+import { PDFDocument } from 'pdf-lib';
 const app = express();
 app.use(express.json({limit:'10mb'}));
 
