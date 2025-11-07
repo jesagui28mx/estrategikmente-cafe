@@ -10,30 +10,30 @@ app.post('/cafe', async (req, res) => {
   try {
     const { cliente, items, totalUSD, totalMXN, to, smtp } = req.body;
 
-    // DESCARGA TEMPLATE
+    // DESCARGA TU TEMPLATE EXACTO
     const template = await fetch('https://estrategikmente.com/template.pdf')
       .then(r => r.arrayBuffer());
 
-    const pdfDoc = await PDFDocument.load(template);
-    const page = pdfDoc.getPage(0);
-    const font = await pdfDoc.embedFont('Helvetica');
-    const bold = await pdfDoc.embedFont('Helvetica-Bold');
+    const pdf = await PDFDocument.load(template);
+    const page = pdf.getPage(0);
+    const font = await pdf.embedFont('Helvetica');
+    const bold = await pdf.embedFont('Helvetica-Bold');
 
-    // COORDENADAS 100 % IGUALES A TU PDF #CAP-2025-111
-    page.drawText(cliente,          {x: 72, y: 660, size:14, font:bold});
-    page.drawText(`$${totalUSD}`,   {x: 72, y: 630, size:12, font});
-    page.drawText(`$${totalMXN}`,   {x: 72, y: 610, size:12, font});
+    // COORDENADAS 1:1 CON TU PDF #CAP-2025-111
+    page.drawText(cliente,           {x: 72, y: 660, size:14, font:bold});
+    page.drawText(`$${totalUSD}`,    {x: 72, y: 630, size:12, font});
+    page.drawText(`$${totalMXN}`,    {x: 72, y: 610, size:12, font});
 
     let y = 540;
     items.forEach(i => {
-      page.drawText(i.qty,          {x:  50, y, size:11, font});
-      page.drawText(i.desc,         {x: 100, y, size:11, font});
-      page.drawText(`$${i.price}`,  {x: 350, y, size:11, font});
-      page.drawText(`$${i.amount}`, {x: 450, y, size:11, font});
+      page.drawText(i.qty,           {x:  50, y, size:11, font});
+      page.drawText(i.desc,          {x: 100, y, size:11, font});
+      page.drawText(`$${i.price}`,   {x: 350, y, size:11, font});
+      page.drawText(`$${i.amount}`,  {x: 450, y, size:11, font});
       y -= 22;
     });
 
-    const pdfBytes = await pdfDoc.save();
+    const pdfBytes = await pdf.save();
     const mail = nodemailer.createTransport(smtp);
     await mail.sendMail({
       from: smtp.auth.user,
