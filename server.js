@@ -2,11 +2,9 @@ import express from 'express';
 import nodemailer from 'nodemailer';
 import { PDFDocument, rgb } from 'pdf-lib';
 import fetch from 'node-fetch';
-import cors from 'cors';
 
 const app=express();
 app.use(express.json({limit:'10mb'}));
-app.use(cors());
 
 app.post('/cafe',async(req,res)=>{
   try{
@@ -17,7 +15,7 @@ app.post('/cafe',async(req,res)=>{
     const font=await pdfDoc.embedFont('Helvetica');
     const fontBold=await pdfDoc.embedFont('Helvetica-Bold');
 
-    // Coordenadas exactas de tu PDF #111
+    // COORDENADAS 100 % IGUALES A TU PDF #111
     page.drawText(cliente,{x:170,y:620,size:12,font:fontBold});
     page.drawText(`$${totalUSD}`,{x:170,y:595,size:12,font});
     page.drawText(`$${totalMXN}`,{x:170,y:570,size:12,font});
